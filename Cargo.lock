@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "neu_net_rust"
+name = "neural_network"
 version = "0.1.0"
 dependencies = [
  "rulinalg",
