@@ -1,4 +1,5 @@
 use crate::neu_net::NeuNet;
+use crate::builder::Builder;
 
 use rulinalg::vector;
 use rulinalg::matrix;
@@ -23,30 +24,12 @@ fn successfull_init_of_neu_net() {
 
 }
 
-#[test]
-fn succesfull_evaluation_of_input() {
-    let neu_net = return_neu_net();
-    let input = vector![2.0; neu_net.layer_nodes[0].clone() as usize];
-    let result = neu_net.evaluate(input);
+// #[test]
+// fn succesfull_evaluation_of_input() {
+//     let neu_net = Builder::build(vec![4, 3, 2]);
+//     let input = vector![2.0; neu_net.layer_nodes[0].clone() as usize];
+//     let result = neu_net.evaluate(input);
 
-    assert_eq!(result.into_iter().len(), 4);
-    // assert_eq!(&result, &vector![1.0])
-}
-
-fn return_neu_net() -> NeuNet {
-    let layer_nodes = vec![3, 4]; 
-    let bias = vec![vector![1.3, 1.2, 10.2, 5.0]];
-    let weights = vec![matrix![1.0, 0.5, 0.5;
-            0.5, 1.0, 0.5;
-            0.5, 0.5, 1.0;
-            0.5, 0.5, 1.0]];
-
-
-    let neu_net = NeuNet{
-        layer_nodes: layer_nodes,
-        bias: bias,
-        weights: weights
-    };
-
-    return neu_net;
-}
+//     assert_eq!(result.into_iter().len(), 2);
+//     // assert_eq!(&result, &vector![1.0])
+// }
