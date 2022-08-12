@@ -1,11 +1,8 @@
 use rulinalg::matrix::Matrix;
 use rulinalg::vector::Vector;
+use rulinalg::vector;
 
-// todo: create builder logic (check)
-    // todo: add error logic for if input len is less than one
-// todo: read this https://doc.rust-lang.org/book/ch17-03-oo-design-patterns.html
-// todo: add loop for evaluate function
-// todo: add error logic to catch if input is wrong size
+// todo: read this to improve error handling https://doc.rust-lang.org/book/ch13-00-functional-features.html
 
 pub struct NeuNet{
     pub layer_nodes: Vec<usize>,
@@ -14,12 +11,25 @@ pub struct NeuNet{
 }
 
 impl NeuNet {
+
     pub fn evaluate(&self, input: Vector<f32>) -> Vector<f32> {
 
-        // for index in 1..self.layer_nodes.len(){
+        if input.clone().into_iter().len() != self.layer_nodes[0] {
+            panic!("Please make sure length of input is {:?}", self.layer_nodes[0])
+        }
 
-        // }
-        let dot_product = &self.weights[0] * &input + &self.bias[0];
+        let result = self.propagate(input);
+        return result
+    }
+
+    fn propagate(&self, mut input: Vector<f32>) -> Vector<f32> {
+        let mut dot_product = vector![];
+
+        for index in 0..self.layer_nodes.len()-1 {
+            dot_product = &self.weights[index] * input + &self.bias[index];
+            input = dot_product.clone();
+        }
+
         return dot_product
     }
 

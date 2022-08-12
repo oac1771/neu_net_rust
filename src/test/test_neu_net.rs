@@ -24,12 +24,22 @@ fn successfull_init_of_neu_net() {
 
 }
 
-// #[test]
-// fn succesfull_evaluation_of_input() {
-//     let neu_net = Builder::build(vec![4, 3, 2]);
-//     let input = vector![2.0; neu_net.layer_nodes[0].clone() as usize];
-//     let result = neu_net.evaluate(input);
+#[test]
+fn succesfull_evaluation_of_input() {
+    let layer_nodes = vec![4, 3, 2];
+    let neu_net = Builder::build(&layer_nodes);
+    let input = vector![2.0; neu_net.layer_nodes[0]];
+    let result = neu_net.evaluate(input);
 
-//     assert_eq!(result.into_iter().len(), 2);
-//     // assert_eq!(&result, &vector![1.0])
-// }
+    assert_eq!(result.into_iter().len(), 2);
+}
+
+#[test]
+#[should_panic(expected = "Please make sure length of input is 4")]
+fn catch_error_if_layer_nodes_less_than_one() {
+    let layer_nodes = vec![4, 3];
+    let input = vector![1.0, 2.2, 3.4];
+    let neu_net: NeuNet = Builder::build(&layer_nodes);
+
+    _ = neu_net.evaluate(input)
+}

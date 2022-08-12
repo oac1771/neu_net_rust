@@ -9,7 +9,12 @@ static BIAS_SCALE: f32 = 0.5;
 pub struct Builder{}
 
 impl Builder{
-    pub fn build(layer_nodes: &Vec<usize>) -> NeuNet{
+
+    pub fn build(layer_nodes: &Vec<usize>) -> NeuNet {
+        
+        if layer_nodes.len() <= 1 {
+            panic!("Must Provide a Network of More Than One Layer")
+        }
 
         let mut weights: Vec<Matrix<f32>> = Vec::new();
         let mut bias: Vec<Vector<f32>> = Vec::new();

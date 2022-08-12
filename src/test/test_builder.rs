@@ -17,3 +17,9 @@ fn successfull_init_of_neu_net_using_builder() {
     }
 }
 
+#[test]
+#[should_panic]
+fn catch_error_if_layer_nodes_less_than_one() {
+    let layer_nodes = vec![4]; 
+    let _neu_net: NeuNet = Builder::build(&layer_nodes);
+}
