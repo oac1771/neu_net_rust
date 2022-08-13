@@ -1,4 +1,5 @@
 use crate::neu_net::NeuNet;
+use crate::activations::{ActivationFunction, Sigmoid};
 
 use rulinalg::matrix::Matrix;
 use rulinalg::vector::Vector;
@@ -18,6 +19,7 @@ impl Builder{
 
         let mut weights: Vec<Matrix<f32>> = Vec::new();
         let mut bias: Vec<Vector<f32>> = Vec::new();
+        let mut layer_types: Vec<Box<dyn ActivationFunction>> = Vec::new();
         
         for index in 1..layer_nodes.len() {
             weights.push(
@@ -35,12 +37,15 @@ impl Builder{
                     }
                 )
             );
+
+            layer_types.push(Box::new(Sigmoid{}))
         }
 
         let neu_net = NeuNet{
             layer_nodes: layer_nodes.to_vec(),
             weights: weights,
-            bias: bias
+            bias: bias,
+            layer_types: layer_types
         };
 
         return neu_net;
