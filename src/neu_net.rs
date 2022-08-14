@@ -15,14 +15,14 @@ pub struct NeuNet{
 
 impl NeuNet {
 
-    pub fn evaluate(&self, mut input: Vector<f32>) -> Vector<f32> {
+    pub fn evaluate(&self, input: &Vector<f32>) -> Vector<f32> {
 
         let mut dot_product = vector![];
-        input = self.layer_types[0].act(input);
+        let mut act_layer = self.layer_types[0].act(input);
 
         for index in 0..self.layer_nodes.len()-1 {
-            dot_product = self.layer_types[index].act(&self.weights[index] * input + &self.bias[index]);
-            input = dot_product.clone();
+            dot_product = self.layer_types[index].act(&(&self.weights[index] * &act_layer + &self.bias[index]));
+            act_layer = dot_product.clone();
         }
 
         return dot_product
