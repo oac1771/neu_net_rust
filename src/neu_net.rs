@@ -1,10 +1,13 @@
-use crate::activations::ActivationFunction;
+use crate::builder::activations::ActivationFunction;
+use crate::builder::data::Data;
 
 use rulinalg::matrix::Matrix;
 use rulinalg::vector::Vector;
 use rulinalg::vector;
 
 // backpropagation
+// train should take iterator that is Iterator<Vec<TrainingData>>
+    // Training data holds .data Vector<f32> and .label Vector<f32>
 
 pub struct NeuNet{
     pub layer_nodes: Vec<usize>,
@@ -27,6 +30,8 @@ impl NeuNet {
 
         return dot_product
     }
+
+    pub fn train(&self, data: impl Iterator<Item = Vec<Vec<Data>>>) {}
 }
 
 

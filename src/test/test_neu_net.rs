@@ -1,4 +1,4 @@
-use crate::builder::Builder;
+use crate::builder::builder::Builder;
 
 use rulinalg::vector;
 

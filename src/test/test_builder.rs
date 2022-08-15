@@ -1,7 +1,8 @@
+use crate::neu_net::NeuNet;
+use crate::builder::builder::Builder;
+
 use rulinalg::matrix::BaseMatrix;
 
-use crate::neu_net::NeuNet;
-use crate::builder::Builder;
 
 #[test]
 fn successfull_init_of_neu_net_using_builder() {
