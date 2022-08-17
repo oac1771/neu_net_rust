@@ -43,7 +43,7 @@ impl Data {
 impl Iterator for DataIter {
     type Item=Data;
     fn next(&mut self) -> Option<Self::Item>{
-        if self.count == self.training_iterations {
+        if self.count < self.training_iterations {
             self.count+=1;
             Some(Data::new())
         } else {
