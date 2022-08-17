@@ -8,7 +8,7 @@ pub struct Data {
 
 pub struct DataIter{
     pub data: Data,
-    pub count: Option<i32>,
+    pub count: i32,
     pub training_iterations: i32
 }
 // I actually think this would be a list of iterators, each iterator generates test data object
@@ -43,13 +43,13 @@ impl Data {
 impl Iterator for DataIter {
     type Item=Data;
     fn next(&mut self) -> Option<Self::Item>{
-        match self.count {
-           Some(x) if x < self.training_iterations => {
-                self.count = Some(self.count.unwrap() + 1);
-                Some(Data::new())
-            }
-            _ => None
+        if self.count == self.training_iterations {
+            self.count+=1;
+            Some(Data::new())
+        } else {
+            None
         }
+        
     }
 }
 
