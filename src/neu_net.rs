@@ -31,7 +31,7 @@ impl NeuNet {
         return dot_product
     }
 
-    pub fn train(&self, data: impl Iterator<Item = Vec<Vec<Data>>>) {}
+    pub fn train(&self, data: Vec<Data>, training_iterations: i32) {}
 }
 
 
