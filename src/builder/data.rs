@@ -1,6 +1,6 @@
 use rulinalg::vector::Vector;
 
 pub struct Data {
-    data: Vector<f32>,
-    label: Vector<i32>
+    pub data: Vector<f64>,
+    pub label: Vector<f64>
 }
