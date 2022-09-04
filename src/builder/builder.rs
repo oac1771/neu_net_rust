@@ -21,7 +21,8 @@ impl Builder{
         let mut bias: Vec<Vector<f64>> = Vec::new();
         let mut layer_types: Vec<Box<dyn ActivationFunction>> = Vec::new();
         let mut rng = rand::thread_rng();
-
+        layer_types.push(Box::new(Sigmoid{}));
+        
         for index in 1..layer_nodes.len() {
             weights.push(
                 Matrix::from_fn(layer_nodes[index], 
