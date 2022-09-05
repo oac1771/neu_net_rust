@@ -29,7 +29,7 @@ fn succesfull_evaluation_of_input() {
 
 #[test]
 fn successfull_train_of_network() {
-    let learning_rate = 0.5;
+    let learning_rate = 100.0;
     let training_iterations = 250;
     let data_set_length = 250;
 
@@ -48,5 +48,6 @@ fn successfull_train_of_network() {
     neu_net.train(data_suite, training_iterations, learning_rate);
 
     assert!(data_suite_label[0] - neu_net.evaluate(&data_suite_data)[0] < 0.01);
-    assert!(data_suite_label[1] - neu_net.evaluate(&data_suite_data)[1] < 0.01);
+    assert!(data_suite_2_label[1] - neu_net.evaluate(&data_suite_2_data)[1] < 0.01);
+    // assert_eq!(data_suite_label, neu_net.evaluate(&data_suite_data));
 }

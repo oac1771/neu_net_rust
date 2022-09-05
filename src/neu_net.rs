@@ -28,20 +28,21 @@ impl NeuNet {
 
     pub fn train(&mut self, data: Vec<Data>, training_iterations: i32, learning_rate: f64) {
         
-        let training_constant = learning_rate / data.len() as f64;
         let mut propagation: Propagation;
         let mut output_error: Vector<f64>;
         let last_element = self.layer_types.len() - 1;
 
         for _index in 0..training_iterations {
-            for data in &data {
+            for training_data in &data {
                 
-                propagation = self.eval(&data.data);
-                let dcostdact = self.cost_function.dcostdact(&data.label, &propagation.activations.last().clone().unwrap());
+                propagation = self.eval(&training_data.data);
+                let dcostdact = self.cost_function.dcostdact(&training_data.label, 
+                    &propagation.activations.last().clone().unwrap(),
+                data.len() as f64);
                 let dactdz =  self.layer_types[last_element].dactdz(&propagation.weighted_inputs.last().clone().unwrap());
                 output_error = dcostdact.elemul(&dactdz);
                 
-                self.backpropagation(&propagation, output_error, training_constant)
+                self.backpropagation(&propagation, output_error, learning_rate)
             }
         }
     }
@@ -67,7 +68,7 @@ impl NeuNet {
         return Propagation{weighted_inputs, activations}
     }
 
-    fn backpropagation(&mut self, propagation: &Propagation, output_error: Vector<f64>, _training_constant: f64) {
+    fn backpropagation(&mut self, propagation: &Propagation, output_error: Vector<f64>, learning_rate: f64) {
 
         let mut layer_errors = vec![];
         let mut delta_layer = output_error;
@@ -81,10 +82,10 @@ impl NeuNet {
 
             layer_errors.push(delta_layer.clone());
         }
-        self.update_controls(&layer_errors, &propagation.activations)
+        self.update_controls(&layer_errors, &propagation.activations, learning_rate)
     }
 
-    fn update_controls(&mut self, layer_errors: &Vec<Vector<f64>>, activations: &Vec<Vector<f64>>) {
+    fn update_controls(&mut self, layer_errors: &Vec<Vector<f64>>, activations: &Vec<Vector<f64>>, learning_rate: f64) {
 
         for (index, layer_error) in layer_errors.iter().rev().enumerate() {
 
@@ -93,7 +94,7 @@ impl NeuNet {
 
             let delta_weight = Matrix::from_fn(rows, cols,
             |col, row| {
-                layer_error[row] * &activations[index][col]
+                learning_rate * layer_error[row] * &activations[index][col]
             });
 
             self.bias[index] = &self.bias[index] - layer_error;
