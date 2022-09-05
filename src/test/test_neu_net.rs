@@ -47,8 +47,6 @@ fn successfull_train_of_network() {
     let mut neu_net = Builder::build(&layer_nodes);
     neu_net.train(data_suite, training_iterations, learning_rate);
 
-    // println!("foooo {:?}", neu_net.evaluate(&data_suite_data))
-
-    // assert_eq!(neu_net.evaluate(&data_suite_data), data_suite_label)
-
+    assert!(data_suite_label[0] - neu_net.evaluate(&data_suite_data)[0] < 0.01);
+    assert!(data_suite_label[1] - neu_net.evaluate(&data_suite_data)[1] < 0.01);
 }

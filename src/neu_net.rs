@@ -4,11 +4,6 @@ use crate::builder::data::Data;
 
 use rulinalg::matrix::{Matrix, BaseMatrix};
 use rulinalg::vector::Vector;
-use rulinalg::matrix;
-
-// figure out how to get matrix from two vectors
-    // could use Matrix::from_fn and build it
-
 
 pub struct NeuNet{
     pub layer_nodes: Vec<usize>,
@@ -28,7 +23,6 @@ impl NeuNet {
     pub fn evaluate(&self, input: &Vector<f64>) -> Vector<f64> {
 
         let propagation = self.eval(input);
-
         return propagation.activations.last().unwrap().clone()
     }
 
@@ -81,10 +75,9 @@ impl NeuNet {
 
         for index in (0..(self.layer_nodes.len() - 2)).rev() {
 
-            let weight = &self.weights[index + 1];
-            let foo = weight.transpose() * &delta_layer;
+            let error_term = (&self.weights[index + 1]).transpose() * &delta_layer;
             let dactdz = self.layer_types[index].dactdz(&propagation.weighted_inputs[index]);
-            delta_layer = (foo).elemul(&dactdz);
+            delta_layer = (error_term).elemul(&dactdz);
 
             layer_errors.push(delta_layer.clone());
         }
@@ -93,21 +86,20 @@ impl NeuNet {
 
     fn update_controls(&mut self, layer_errors: &Vec<Vector<f64>>, activations: &Vec<Vector<f64>>) {
 
-        let mut delta_weight = matrix![];
-        // make this layer_errors.iter() go backwards
-        for (index, layer_error) in layer_errors.iter().enumerate() {
+        for (index, layer_error) in layer_errors.iter().rev().enumerate() {
 
-            self.bias[index] = &self.bias[index] - &layer_errors[index];
-            let rows = layer_error.clone().into_iter().len();
-            let cols = activations[index].clone().into_iter().len();
+            let rows = layer_error.into_iter().len();
+            let cols = (&activations[index]).into_iter().len();
 
-            delta_weight = Matrix::from_fn(rows, cols,
-            |row, col| {
-                layer_error[row] * activations[index][col]
+            let delta_weight = Matrix::from_fn(rows, cols,
+            |col, row| {
+                layer_error[row] * &activations[index][col]
             });
+
+            self.bias[index] = &self.bias[index] - layer_error;
+            self.weights[index] = &self.weights[index] - delta_weight;
+
         }
-
-
 
     }
 }
