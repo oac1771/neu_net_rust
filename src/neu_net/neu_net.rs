@@ -107,5 +107,5 @@ impl NeuNet {
 
 
 #[cfg(test)]
-#[path = "./test/test_neu_net.rs"]
+#[path = "../test/test_neu_net.rs"]
 mod test_neu_net;

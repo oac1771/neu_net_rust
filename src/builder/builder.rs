@@ -1,4 +1,4 @@
-use crate::neu_net::NeuNet;
+use crate::neu_net::neu_net::NeuNet;
 use crate::builder::activations::{ActivationFunction, Sigmoid};
 use crate::builder::costs::Quadratic;
 
