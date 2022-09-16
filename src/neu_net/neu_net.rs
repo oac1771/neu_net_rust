@@ -1,6 +1,6 @@
-use crate::builder::activations::ActivationFunction;
-use crate::builder::costs::CostFunction;
-use crate::builder::data::Data;
+use crate::neu_net::builder::activations::ActivationFunction;
+use crate::neu_net::builder::costs::CostFunction;
+use crate::neu_net::builder::data::Data;
 
 use rulinalg::matrix::{Matrix, BaseMatrix};
 use rulinalg::vector::Vector;

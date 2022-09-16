@@ -1,6 +1,6 @@
 use crate::neu_net::neu_net::NeuNet;
-use crate::builder::activations::{ActivationFunction, Sigmoid};
-use crate::builder::costs::Quadratic;
+use crate::neu_net::builder::activations::{ActivationFunction, Sigmoid};
+use crate::neu_net::builder::costs::Quadratic;
 
 use rulinalg::matrix::Matrix;
 use rulinalg::vector::Vector;
@@ -57,5 +57,5 @@ impl Builder{
 }
 
 #[cfg(test)]
-#[path = "../test/test_builder.rs"]
+#[path = "../../test/test_builder.rs"]
 mod test;

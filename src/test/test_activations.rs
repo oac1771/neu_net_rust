@@ -1,5 +1,5 @@
-use crate::builder::activations::Sigmoid;
-use crate::builder::activations::ActivationFunction;
+use crate::neu_net::builder::activations::Sigmoid;
+use crate::neu_net::builder::activations::ActivationFunction;
 use rulinalg::vector;
 
 #[test]

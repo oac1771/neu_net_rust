@@ -1,5 +1,5 @@
-use crate::builder::costs::Quadratic;
-use crate::builder::costs::CostFunction;
+use crate::neu_net::builder::costs::Quadratic;
+use crate::neu_net::builder::costs::CostFunction;
 use rulinalg::vector;
 
 #[test]

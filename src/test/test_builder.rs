@@ -1,5 +1,5 @@
 use crate::neu_net::neu_net::NeuNet;
-use crate::builder::builder::Builder;
+use crate::neu_net::builder::builder::Builder;
 
 use rulinalg::matrix::BaseMatrix;
 

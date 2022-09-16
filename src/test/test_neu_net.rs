@@ -1,5 +1,5 @@
-use crate::builder::builder::Builder;
-use crate::builder::data::Data;
+use crate::neu_net::builder::builder::Builder;
+use crate::neu_net::builder::data::Data;
 
 use rulinalg::vector::Vector;
 use rulinalg::vector;
