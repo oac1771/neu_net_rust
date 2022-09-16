@@ -28,5 +28,5 @@ impl CostFunction for Quadratic {
 
 
 #[cfg(test)]
-#[path = "../../test/test_costs.rs"]
+#[path = "./../test/test_costs.rs"]
 mod test;

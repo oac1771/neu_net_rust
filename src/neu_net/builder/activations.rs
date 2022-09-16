@@ -27,5 +27,5 @@ impl ActivationFunction for Sigmoid {
 
 
 #[cfg(test)]
-#[path = "../../test/test_activations.rs"]
+#[path = "./../test/test_activations.rs"]
 mod test;

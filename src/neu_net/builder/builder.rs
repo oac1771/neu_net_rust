@@ -57,5 +57,5 @@ impl Builder{
 }
 
 #[cfg(test)]
-#[path = "../../test/test_builder.rs"]
+#[path = "./../test/test_builder.rs"]
 mod test;
