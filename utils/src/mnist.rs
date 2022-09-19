@@ -1,4 +1,3 @@
-use std::io;
 use std::io::Error;
 use std::io::prelude::*;
 use rulinalg::vector::Vector;
@@ -12,19 +11,22 @@ pub struct MnistData {
 
 impl MnistData {
 
-    pub fn load_data(path: &str) -> Result<(), Error> {
+    pub fn load_data(label_path: &str, image_path: &str) -> Result<(), Error> {
 
-        let file_result = File::open(path);
-        let file  = match file_result {
-            Ok(file) => file,
-            Err(error) => panic!("Could not open file: {:?}", error)
-        };
+        let label_contents = MnistData::load_contents(label_path);
+        let image_contents = MnistData::load_contents(image_path);
 
-        let d = GzDecoder::new(file);
 
-        for line in io::BufReader::new(d).lines() {
-            println!("{}", line.unwrap());
-        }
         Ok(())
+    }
+
+    fn load_contents(path: &str) -> Result<(), Error> {
+        let file = File::open(path)?;
+        let mut gz = GzDecoder::new(file);
+        let mut contents: Vec<u8> = Vec::new();
+        gz.read_to_end(&mut contents);
+
+        Ok(())
+
     }
 }

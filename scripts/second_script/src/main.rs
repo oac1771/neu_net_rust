@@ -1,14 +1,14 @@
 // use neural_network::neu_net::builder::builder::Builder;
 use utils::mnist::MnistData;
-use std::env::current_dir;
 
-// figure out how to read from different directories (full path or relative does not work)
+// figure out which image file to use
+// add iter_map to change from u8 to f64
+// return list of MnistData
+// have train take in list of MnistData -> might need MnistDate to impl Trait Data (????)
 
 fn main() {
-    let path = "../data/t10k-labels-idx1-ubyte.gz";
-    let cwd = current_dir();
-    let _mnist = MnistData::load_data(path);
-
-    println!("path {}", path);
-    println!("cwd {:?}", cwd);
+    let label_path = "data/t10k-labels-idx1-ubyte.gz";
+    let image_path = "data/t10k-labels-idx1-ubyte.gz";
+    let _mnist = MnistData::load_data(label_path, image_path);
 }
+
