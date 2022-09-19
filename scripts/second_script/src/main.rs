@@ -4,6 +4,7 @@ use utils::mnist::MnistData;
 // figure out which image file to use
 // add iter_map to change from u8 to f64
 // return list of MnistData
+    // maybe make datalength set customizable??
 // have train take in list of MnistData -> might need MnistDate to impl Trait Data (????)
 
 fn main() {
