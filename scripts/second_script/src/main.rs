@@ -2,7 +2,7 @@
 use utils::mnist::MnistData;
 
 // process images data
-// add iter_map to change from u8 to f64
+    // https://stackoverflow.com/questions/46867355/is-it-possible-to-split-a-vector-into-groups-of-10-with-iterators
 // return list of MnistData
     // maybe make datalength set customizable??
 // have train take in list of MnistData -> might need MnistDate to impl Trait Data (????)

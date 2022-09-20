@@ -1,7 +1,6 @@
 use std::io::Error;
 use std::io::prelude::*;
 use rulinalg::vector::Vector;
-use rulinalg::vector;
 use flate2::read::GzDecoder;
 use std::fs::File;
 
@@ -16,11 +15,6 @@ pub struct MnistData {
 
 impl MnistData {
 
-    pub fn new() -> MnistData {
-        return MnistData{
-            label: vector![]
-        };
-    }
     pub fn load_data(label_path: &str, image_path: &str) -> Result<(), Error> {
 
         let label_contents = MnistData::load_contents(label_path)?;
