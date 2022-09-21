@@ -7,21 +7,23 @@ use std::fs::File;
 const START_LABEL_DATA_INDEX: usize = 8;
 const LENGTH_OF_LABEL_OUTPUT_VECTOR: usize = 10;
 const START_IMAGE_DATA_INDEX: usize = 16;
+const NUMBER_ELEMENTS_IN_IMAGE: usize = 784;
+const MAX_IMAGE_ELEMENT_VALUE: f64 = 255.0;
 
 pub struct MnistData {
-    // pub data: Vector<f64>,
+    pub data: Vector<f64>,
     pub label: Vector<f64>
 }
 
 impl MnistData {
 
-    pub fn load_data(label_path: &str, image_path: &str) -> Result<(), Error> {
+    pub fn load_data(label_path: &str, image_path: &str) -> Result<Vec<MnistData>, Error> {
 
         let label_contents = MnistData::load_contents(label_path)?;
         let image_contents = MnistData::load_contents(image_path)?;
 
-        let _ = MnistData::process(&label_contents, &image_contents);
-        Ok(())
+        let mnist_data = MnistData::process(&label_contents, &image_contents);
+        Ok(mnist_data)
     }
 
     fn load_contents(path: &str) -> Result<Vec::<u8>, Error> {
@@ -35,18 +37,27 @@ impl MnistData {
 
     }
 
-    fn process(label_contents: &Vec<u8>, image_contents: &Vec<u8>) {
-        let striped_label_contents = &label_contents[START_LABEL_DATA_INDEX..];
-        let _striped_image_contents = &image_contents[START_IMAGE_DATA_INDEX..];
+    fn process(label_contents: &Vec<u8>, image_contents: &Vec<u8>) -> Vec<MnistData> {
+        let cleaned_label_contents = &label_contents[START_LABEL_DATA_INDEX..];
+        let data_set_length = cleaned_label_contents.len();
+        let cleaned_image_contents = &image_contents[START_IMAGE_DATA_INDEX..]
+            .to_vec()
+            .chunks(NUMBER_ELEMENTS_IN_IMAGE)
+            .map(|x| x.to_vec())
+            .collect::<Vec<Vec<u8>>>();
 
-        let mut mnist_data: Vec<MnistData> = Vec::with_capacity(striped_label_contents.len());
+        let mut mnist_data: Vec<MnistData> = Vec::with_capacity(data_set_length);
         let mut label: Vector<f64>;
+        let mut data: Vector<f64>;
 
-        for label_value in striped_label_contents {
-            label = MnistData::process_label(label_value);
-            mnist_data.push(MnistData { label });
+        for index in 0..data_set_length {
+            label = MnistData::process_label(&cleaned_label_contents[index]);
+            data = MnistData::process_image(&cleaned_image_contents[index]);
+            mnist_data.push(MnistData { label, data });
 
         }
+
+        return mnist_data
     }
 
     fn process_label(label: &u8) -> Vector<f64> {
@@ -54,6 +65,12 @@ impl MnistData {
         label_vector[*label as usize] = 1.0;
 
         return label_vector;
+
+    }
+
+    fn process_image(image: &Vec<u8>) -> Vector<f64> {
+        let image_vector = image.into_iter().map(|x| *x as f64 / MAX_IMAGE_ELEMENT_VALUE).collect::<Vector<f64>>();
+        return image_vector
 
     }
 }
