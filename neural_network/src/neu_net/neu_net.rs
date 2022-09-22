@@ -26,7 +26,7 @@ impl NeuNet {
         return propagation.activations.last().unwrap().clone()
     }
 
-    pub fn train(&mut self, data: Vec<Data>, training_iterations: i32, learning_rate: f64) {
+    pub fn train(&mut self, data: Vec<impl Data>, training_iterations: i32, learning_rate: f64) {
         
         let mut propagation: Propagation;
         let mut output_error: Vector<f64>;
@@ -35,8 +35,8 @@ impl NeuNet {
         for _index in 0..training_iterations {
             for training_data in &data {
                 
-                propagation = self.eval(&training_data.data);
-                let dcostdact = self.cost_function.dcostdact(&training_data.label, 
+                propagation = self.eval(&training_data.get_data());
+                let dcostdact = self.cost_function.dcostdact(&training_data.get_label(), 
                     &propagation.activations.last().clone().unwrap(),
                 data.len() as f64);
                 let dactdz =  self.layer_types[last_element].dactdz(&propagation.weighted_inputs.last().clone().unwrap());

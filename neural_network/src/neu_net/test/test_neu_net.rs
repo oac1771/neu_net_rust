@@ -4,11 +4,27 @@ use crate::neu_net::builder::data::Data;
 use rulinalg::vector::Vector;
 use rulinalg::vector;
 
-fn generate_test_data(data_set_length: i32, data: &Vector<f64>, label: &Vector<f64>) -> Vec<Data> {
-    let mut data_suite = Vec::new();
+pub struct TestData {
+    pub data: Vector<f64>,
+    pub label: Vector<f64>
+}
 
+impl Data for TestData {
+    fn get_data(&self) -> &Vector<f64> {
+        return &self.data
+    }
+
+    fn get_label(&self) -> &Vector<f64> {
+        return &self.label
+    }
+}
+
+fn generate_test_data<'a>(data_set_length: i32, data: &'a Vector<f64>, label: &'a Vector<f64>) -> Vec<impl Data> {
+    let mut data_suite = Vec::new();
+    
     for _ in 0..data_set_length {
-        data_suite.push(Data{
+        
+        data_suite.push(TestData{
             data: data.clone(),
             label: label.clone()
         })

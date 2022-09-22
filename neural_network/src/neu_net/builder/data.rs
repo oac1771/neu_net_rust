@@ -1,6 +1,6 @@
 use rulinalg::vector::Vector;
 
-pub struct Data {
-    pub data: Vector<f64>,
-    pub label: Vector<f64>
+pub trait Data {
+    fn get_data(&self) -> &Vector<f64>;
+    fn get_label(&self) -> &Vector<f64>;
 }

@@ -3,6 +3,8 @@ use std::io::prelude::*;
 use rulinalg::vector::Vector;
 use flate2::read::GzDecoder;
 use std::fs::File;
+use neural_network::neu_net::builder::data::Data;
+
 
 const START_LABEL_DATA_INDEX: usize = 8;
 const LENGTH_OF_LABEL_OUTPUT_VECTOR: usize = 10;
@@ -13,6 +15,16 @@ const MAX_IMAGE_ELEMENT_VALUE: f64 = 255.0;
 pub struct MnistData {
     pub data: Vector<f64>,
     pub label: Vector<f64>
+}
+
+impl Data for MnistData {
+    fn get_data(&self) -> &Vector<f64> {
+        return &self.data
+    }
+
+    fn get_label(&self) -> &Vector<f64> {
+        return &self.label
+    }
 }
 
 impl MnistData {
@@ -53,8 +65,7 @@ impl MnistData {
         for index in 0..data_set_length {
             label = MnistData::process_label(&cleaned_label_contents[index]);
             data = MnistData::process_image(&cleaned_image_contents[index]);
-            mnist_data.push(MnistData { label, data });
-
+            mnist_data.push(MnistData{label, data});
         }
 
         return mnist_data
