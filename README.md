@@ -1,12 +1,7 @@
-https://stackoverflow.com/questions/49849878/how-to-deal-with-multiple-nested-workspace-roots
+Look into performance analyzers
+https://crates.io/crates/criterion
 
-use this to refactor this dirctory
--> want scripts directory to have multiple scripts (hopefully can build binaries independently or atleast be able to build them all)
-
-https://ngoldbaum.github.io/posts/loading-mnist-data-in-rust/
-load mnist data into rust
-
-create benchmark scripts 
+create branch and try this using same criterion crate
 try using ndarray instad of current library to compare speed (https://docs.rs/ndarray/0.12.1/ndarray/)
 
 implement ReLu
