@@ -1,5 +1,6 @@
 use neural_network::neu_net::builder::builder::Builder;
 use utils::mnist::MnistData;
+use std::time::Instant;
 
 fn main() {
     let label_path = "data/t10k-labels-idx1-ubyte.gz";
@@ -8,13 +9,15 @@ fn main() {
 
     println!("Building Neural Network");
     let layer_nodes = vec![784, 10];
-    let learning_rate = 100.0;
+    let learning_rate = 0.9;
     let training_iterations = 1;
     let mut neu_net = Builder::build(&layer_nodes);
 
-    println!("Starting Training");
+    let start = Instant::now();
     neu_net.train(mnist_data, training_iterations, learning_rate);
-    println!("Training Has Ended");
+    let duration = start.elapsed();
+
+    println!("Training time is: {:?}", duration);
 
 }
 
