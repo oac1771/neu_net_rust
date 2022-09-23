@@ -14,7 +14,7 @@ fn main() {
     let mut neu_net = Builder::build(&layer_nodes);
 
     let start = Instant::now();
-    neu_net.train(mnist_data, training_iterations, learning_rate);
+    neu_net.train(&mnist_data, training_iterations, learning_rate);
     let duration = start.elapsed();
 
     println!("Training time is: {:?}", duration);

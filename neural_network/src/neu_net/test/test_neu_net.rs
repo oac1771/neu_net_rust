@@ -61,7 +61,7 @@ fn successfull_train_of_network() {
 
     let layer_nodes = vec![4, 3, 2];
     let mut neu_net = Builder::build(&layer_nodes);
-    neu_net.train(data_suite, training_iterations, learning_rate);
+    neu_net.train(&data_suite, training_iterations, learning_rate);
 
     assert!(data_suite_label[0] - neu_net.evaluate(&data_suite_data)[0] < 0.01);
     assert!(data_suite_2_label[1] - neu_net.evaluate(&data_suite_2_data)[1] < 0.01);
