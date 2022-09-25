@@ -1,5 +1,5 @@
 [workspace]
 members = [
-    "first_script",
-    "second_script",
+    "first",
+    "second",
 ]

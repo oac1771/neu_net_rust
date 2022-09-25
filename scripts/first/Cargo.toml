@@ -6,11 +6,11 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-criterion = "0.4.0"
 neural_network = {path = "../../neural_network"}
 utils = {path = "../../utils"}
 
-
-[[bench]]
-name = "first_benchmark"
-harness = false
+[[bin]]
+name = "main"
+test = false
+bench = false
+path = "src/main.rs"
