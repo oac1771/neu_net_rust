@@ -2,9 +2,8 @@ use crate::neu_net::neu_net::NeuNet;
 use crate::neu_net::builder::activations::{ActivationFunction, Sigmoid};
 use crate::neu_net::builder::costs::Quadratic;
 
-use rulinalg::matrix::Matrix;
-use rulinalg::vector::Vector;
 use rand::Rng;
+use ndarray::{Array1, Array2};
 
 pub struct Builder{}
 
@@ -17,24 +16,23 @@ impl Builder{
         }
         
         let cost_function = Box::new(Quadratic{});
-        let mut weights: Vec<Matrix<f64>> = Vec::new();
-        let mut bias: Vec<Vector<f64>> = Vec::new();
+        let mut weights: Vec<Array2<f64>> = Vec::new();
+        let mut bias: Vec<Array1<f64>> = Vec::new();
         let mut layer_types: Vec<Box<dyn ActivationFunction>> = Vec::new();
         let mut rng = rand::thread_rng();
         layer_types.push(Box::new(Sigmoid{}));
         
         for index in 1..layer_nodes.len() {
             weights.push(
-                Matrix::from_fn(layer_nodes[index], 
-                    layer_nodes[index - 1],
-                    |_col, _row| {
+                Array2::from_shape_fn((layer_nodes[index - 1], layer_nodes[index]),
+                    |(_i, _j)| {
                         rng.gen_range(-1.0..1.0)
                     }
                 )
             );
             bias.push(
-                Vector::from_fn(layer_nodes[index], 
-                        |_row| {
+                Array1::from_shape_fn(layer_nodes[index], 
+                        |_i| {
                         rng.gen_range(-1.0..1.0)
                     }
                 )

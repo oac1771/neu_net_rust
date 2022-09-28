@@ -1,7 +1,6 @@
 use crate::neu_net::neu_net::NeuNet;
 use crate::neu_net::builder::builder::Builder;
 
-use rulinalg::matrix::BaseMatrix;
 
 
 #[test]
@@ -13,8 +12,8 @@ fn successfull_init_of_neu_net_using_builder() {
 
     for index in 0..layer_nodes.len()-1 {
         assert_eq!(neu_net.bias[index].iter().len(), layer_nodes[index + 1]);
-        assert_eq!(neu_net.weights[index].rows(), layer_nodes[index + 1]);
-        assert_eq!(neu_net.weights[index].cols(), layer_nodes[index]);
+        assert_eq!(neu_net.weights[index].row(index).len(), layer_nodes[index + 1]);
+        assert_eq!(neu_net.weights[index].column(index).len(), layer_nodes[index]);
     }
 }
 
