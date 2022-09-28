@@ -13,18 +13,18 @@ pub struct NeuNet{
     pub cost_function: Box<dyn CostFunction>
 }
 
-// pub struct Propagation {
-//     pub weighted_inputs: Vec<Vector<f64>>,
-//     pub activations: Vec<Vector<f64>>
-// }
+pub struct Propagation {
+    pub weighted_inputs: Vec<Array1<f64>>,
+    pub activations: Vec<Array1<f64>>
+}
 
-// impl NeuNet {
+impl NeuNet {
 
-//     pub fn evaluate(&self, input: &Vector<f64>) -> Vector<f64> {
+    pub fn evaluate(&self, input: &Array1<f64>) -> Array1<f64> {
 
-//         let propagation = self.eval(input);
-//         return propagation.activations.last().unwrap().clone()
-//     }
+        let propagation = self.eval(input);
+        return propagation.activations.last().unwrap().clone()
+    }
 
 //     pub fn train(&mut self, data: &Vec<impl Data>, training_iterations: i32, learning_rate: f64) {
         
@@ -47,26 +47,26 @@ pub struct NeuNet{
 //         }
 //     }
 
-//     fn eval(&self, data: &Vector<f64>) -> Propagation {
+    fn eval(&self, data: &Array1<f64>) -> Propagation {
 
-//         let mut weighted_inputs: Vec<Vector<f64>> = vec![];
-//         let mut activations: Vec<Vector<f64>> = vec![];
-//         let mut act_layer = self.layer_types[0].act(data);
+        let mut weighted_inputs: Vec<Array1<f64>> = vec![];
+        let mut activations: Vec<Array1<f64>> = vec![];
+        let mut act_layer = self.layer_types[0].act(data);
 
-//         activations.push(act_layer.clone());
+        activations.push(act_layer.clone());
 
-//         for index in 0..self.layer_nodes.len()-1 {
-//             let weighted_input = &self.weights[index] * act_layer + &self.bias[index];
-//             let activation = self.layer_types[index].act(&weighted_input);
+        for index in 0..self.layer_nodes.len()-1 {
+            let weighted_input = &self.weights[index].dot(&act_layer) + &self.bias[index];
+            let activation = self.layer_types[index].act(&weighted_input);
             
-//             weighted_inputs.push(weighted_input);
-//             activations.push(activation.clone());
+            weighted_inputs.push(weighted_input);
+            activations.push(activation.clone());
 
-//             act_layer = activation
-//         }
+            act_layer = activation;
+        }
 
-//         return Propagation{weighted_inputs, activations}
-//     }
+        return Propagation{weighted_inputs, activations}
+    }
 
 //     fn backpropagation(&mut self, propagation: &Propagation, output_error: Vector<f64>, learning_rate: f64) {
 
@@ -103,7 +103,7 @@ pub struct NeuNet{
 //         }
 
 //     }
-// }
+}
 
 
 #[cfg(test)]

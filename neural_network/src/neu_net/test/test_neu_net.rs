@@ -1,5 +1,7 @@
-// use crate::neu_net::builder::builder::Builder;
+use crate::neu_net::builder::builder::Builder;
 // use crate::neu_net::builder::data::Data;
+
+use ndarray::Array1;
 
 
 // pub struct TestData {
@@ -31,15 +33,15 @@
 //     return data_suite
 // }
 
-// #[test]
-// fn succesfull_evaluation_of_input() {
-//     let layer_nodes = vec![4, 3, 2];
-//     let neu_net = Builder::build(&layer_nodes);
-//     let input = vector![10000.0; neu_net.layer_nodes[0]];
-//     let result = neu_net.evaluate(&input);
+#[test]
+fn succesfull_evaluation_of_input() {
+    let layer_nodes = vec![4, 3, 2];
+    let neu_net = Builder::build(&layer_nodes);
+    let input = Array1::from_shape_fn(neu_net.layer_nodes[0], |_i|{100.0});
+    let result = neu_net.evaluate(&input);
 
-//     assert_eq!(result.into_iter().len(), 2);
-// }
+    assert_eq!(result.into_iter().len(), 2);
+}
 
 // #[test]
 // fn successfull_train_of_network() {

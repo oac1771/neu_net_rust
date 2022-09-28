@@ -24,7 +24,7 @@ impl Builder{
         
         for index in 1..layer_nodes.len() {
             weights.push(
-                Array2::from_shape_fn((layer_nodes[index - 1], layer_nodes[index]),
+                Array2::from_shape_fn((layer_nodes[index], layer_nodes[index - 1]),
                     |(_i, _j)| {
                         rng.gen_range(-1.0..1.0)
                     }

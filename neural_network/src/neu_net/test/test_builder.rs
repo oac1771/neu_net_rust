@@ -10,10 +10,9 @@ fn successfull_init_of_neu_net_using_builder() {
 
     assert_eq!(&neu_net.layer_nodes, &layer_nodes);
 
-    for index in 0..layer_nodes.len()-1 {
-        assert_eq!(neu_net.bias[index].iter().len(), layer_nodes[index + 1]);
-        assert_eq!(neu_net.weights[index].row(index).len(), layer_nodes[index + 1]);
-        assert_eq!(neu_net.weights[index].column(index).len(), layer_nodes[index]);
+    for index in 1..layer_nodes.len() {
+        assert_eq!(neu_net.bias[index-1].iter().len(), layer_nodes[index]);
+        assert_eq!(neu_net.weights[index-1].shape(), [layer_nodes[index], layer_nodes[index - 1]] );
     }
 }
 
