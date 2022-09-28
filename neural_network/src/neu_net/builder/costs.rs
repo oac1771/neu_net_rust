@@ -2,7 +2,7 @@ use ndarray::Array1;
 
 pub trait CostFunction {
     fn cost(&self, label: &Array1<f64>, output: &Array1<f64>) -> Array1<f64>;
-    fn dcostdact(&self, label: &Array1<f64>, output: &Array1<f64>, data_set_length: f64) -> Array1<f64>;
+    fn dcostdact(&self, label: &Array1<f64>, output: &Array1<f64>) -> Array1<f64>;
 }
 
 pub struct Quadratic;
@@ -17,11 +17,9 @@ impl CostFunction for Quadratic {
         return result
     }
 
-    fn dcostdact(&self, label: &Array1<f64>, output: &Array1<f64>, data_set_length: f64) -> Array1<f64> {
+    fn dcostdact(&self, label: &Array1<f64>, output: &Array1<f64>) -> Array1<f64> {
 
-        let result = (output - label).map(|x| {
-            x / data_set_length
-        });
+        let result = output - label;
         return result
     }
 }

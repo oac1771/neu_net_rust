@@ -1,9 +1,8 @@
 use crate::neu_net::builder::activations::ActivationFunction;
 use crate::neu_net::builder::costs::CostFunction;
-// use crate::neu_net::builder::data::Data;
+use crate::neu_net::builder::data::Data;
 
-use ndarray::{Array1, Array2};
-
+use ndarray::{Array1, Array2, Array};
 
 pub struct NeuNet{
     pub layer_nodes: Vec<usize>,
@@ -26,26 +25,25 @@ impl NeuNet {
         return propagation.activations.last().unwrap().clone()
     }
 
-//     pub fn train(&mut self, data: &Vec<impl Data>, training_iterations: i32, learning_rate: f64) {
+    pub fn train(&mut self, data: &Vec<impl Data>, training_iterations: i32, learning_rate: f64) {
         
-//         let mut propagation: Propagation;
-//         let mut output_error: Vector<f64>;
-//         let last_element = self.layer_types.len() - 1;
+        let mut propagation: Propagation;
+        let mut output_error: Array1<f64>;
+        let last_element = self.layer_types.len() - 1;
 
-//         for _index in 0..training_iterations {
-//             for training_data in data {
+        for _index in 0..training_iterations {
+            for training_data in data {
                 
-//                 propagation = self.eval(&training_data.get_data());
-//                 let dcostdact = self.cost_function.dcostdact(&training_data.get_label(), 
-//                     &propagation.activations.last().clone().unwrap(),
-//                 data.len() as f64);
-//                 let dactdz =  self.layer_types[last_element].dactdz(&propagation.weighted_inputs.last().clone().unwrap());
-//                 output_error = dcostdact.elemul(&dactdz);
+                propagation = self.eval(&training_data.get_data());
+                let dcostdact = self.cost_function.dcostdact(&training_data.get_label(), 
+                    &propagation.activations.last().clone().unwrap());
+                let dactdz =  self.layer_types[last_element].dactdz(&propagation.weighted_inputs.last().clone().unwrap());
+                output_error = dcostdact * &dactdz;
                 
-//                 self.backpropagation(&propagation, output_error, learning_rate)
-//             }
-//         }
-//     }
+                self.backpropagation(&propagation, output_error, learning_rate)
+            }
+        }
+    }
 
     fn eval(&self, data: &Array1<f64>) -> Propagation {
 
@@ -68,41 +66,36 @@ impl NeuNet {
         return Propagation{weighted_inputs, activations}
     }
 
-//     fn backpropagation(&mut self, propagation: &Propagation, output_error: Vector<f64>, learning_rate: f64) {
+    fn backpropagation(&mut self, propagation: &Propagation, output_error: Array1<f64>, learning_rate: f64) {
 
-//         let mut layer_errors = vec![];
-//         let mut delta_layer = output_error;
-//         layer_errors.push(delta_layer.clone());
+        let mut layer_errors = vec![];
+        let mut delta_layer = output_error;
+        layer_errors.push(delta_layer.clone());
 
-//         for index in (0..(self.layer_nodes.len() - 2)).rev() {
+        for index in (0..(self.layer_nodes.len() - 2)).rev() {
 
-//             let error_term = (&self.weights[index + 1]).transpose() * &delta_layer;
-//             let dactdz = self.layer_types[index].dactdz(&propagation.weighted_inputs[index]);
-//             delta_layer = (error_term).elemul(&dactdz);
+            let error_term = (&self.weights[index + 1].t()).dot(&delta_layer);
+            let dactdz = self.layer_types[index].dactdz(&propagation.weighted_inputs[index]);
+            delta_layer = error_term * &dactdz;
 
-//             layer_errors.push(delta_layer.clone());
-//         }
-//         self.update_controls(&layer_errors, &propagation.activations, learning_rate)
-//     }
+            layer_errors.push(delta_layer.clone());
+        }
+        self.update_controls(&layer_errors, &propagation.activations, learning_rate)
+    }
 
-//     fn update_controls(&mut self, layer_errors: &Vec<Vector<f64>>, activations: &Vec<Vector<f64>>, learning_rate: f64) {
+    fn update_controls(&mut self, layer_errors: &Vec<Array1<f64>>, activations: &Vec<Array1<f64>>, _learning_rate: f64) {
 
-//         for (index, layer_error) in layer_errors.iter().rev().enumerate() {
+        for (index, layer_error) in layer_errors.iter().rev().enumerate() {
 
-//             let rows = layer_error.into_iter().len();
-//             let cols = (&activations[index]).into_iter().len();
+            let delta_weight = Array::from_shape_fn((layer_error.len(), activations[index].len()), 
+            |(i, j)| layer_error[i] * &activations[index][j]);
 
-//             let delta_weight = Matrix::from_fn(rows, cols,
-//             |col, row| {
-//                 learning_rate * layer_error[row] * &activations[index][col]
-//             });
+            self.bias[index] = &self.bias[index] - layer_error;
+            self.weights[index] = &self.weights[index] - delta_weight;
 
-//             self.bias[index] = &self.bias[index] - layer_error;
-//             self.weights[index] = &self.weights[index] - delta_weight;
+        }
 
-//         }
-
-//     }
+    }
 }
 
 
