@@ -7,5 +7,5 @@ edition = "2021"
 
 [dependencies]
 flate2 = "1.0.24"
-rulinalg = "0.4.2"
+ndarray = "0.15.6"
 neural_network = {path = "../neural_network"}
