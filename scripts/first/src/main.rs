@@ -1,17 +1,53 @@
-use neural_network::neu_net::builder::builder::Builder;
-use utils::mnist::MnistData;
+#[time_graph::instrument]
+fn run_computation(max: u64) {
+    for i in 0..max {
+        compute(i)
+    }
+
+    time_graph::spanned!("another span", {
+        details::bottom_5us();
+    });
+
+    for _ in 0..(max * max) {
+        details::bottom_5us();
+    }
+}
+
+#[time_graph::instrument]
+pub fn compute(count: u64) {
+    for _ in 0..count {
+        details::bottom_5us();
+    }
+}
+
+mod details {
+    #[time_graph::instrument]
+    pub fn bottom_5us() {
+        std::thread::sleep(std::time::Duration::from_micros(5));
+    }
+}
+
+#[time_graph::instrument]
+fn run_other_5ms() {
+    std::thread::sleep(std::time::Duration::from_millis(5));
+}
 
 fn main() {
-    let learning_rate = 0.9;
-    let training_iterations = 1;
-    let label_path = "../data/t10k-labels-idx1-ubyte.gz";
-    let image_path = "../data/t10k-images-idx3-ubyte.gz";
-    let mnist_data = MnistData::load_data(label_path, image_path).unwrap();
+    time_graph::enable_data_collection(true);
 
-    println!("Building Neural Network");
-    let layer_nodes = vec![784, 10];
-    let mut neu_net = Builder::build(&layer_nodes);
+    run_other_5ms();
+    run_computation(10);
 
-    neu_net.train(&mnist_data, training_iterations, learning_rate);
+    let graph = time_graph::get_full_graph();
 
+    println!("{}", graph.as_dot());
+
+    #[cfg(feature = "json")]
+    println!("{}", graph.as_json());
+
+    #[cfg(feature = "table")]
+    println!("{}", graph.as_table());
+
+    #[cfg(feature = "table")]
+    println!("{}", graph.as_short_table());
 }
