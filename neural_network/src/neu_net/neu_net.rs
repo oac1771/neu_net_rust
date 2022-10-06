@@ -4,6 +4,7 @@ use crate::neu_net::builder::data::Data;
 
 use rulinalg::matrix::{Matrix, BaseMatrix};
 use rulinalg::vector::Vector;
+use time_graph::spanned;
 
 pub struct NeuNet{
     pub layer_nodes: Vec<usize>,
@@ -17,6 +18,9 @@ pub struct Propagation {
     pub weighted_inputs: Vec<Vector<f64>>,
     pub activations: Vec<Vector<f64>>
 }
+
+// improve update controls
+// improve eval 
 
 impl NeuNet {
 
@@ -46,7 +50,8 @@ impl NeuNet {
             }
         }
     }
-
+    
+    #[time_graph::instrument]
     fn eval(&self, data: &Vector<f64>) -> Propagation {
 
         let mut weighted_inputs: Vec<Vector<f64>> = vec![];
@@ -68,6 +73,7 @@ impl NeuNet {
         return Propagation{weighted_inputs, activations}
     }
 
+    #[time_graph::instrument]
     fn backpropagation(&mut self, propagation: &Propagation, output_error: Vector<f64>, learning_rate: f64) {
 
         let mut layer_errors = vec![];
@@ -85,6 +91,7 @@ impl NeuNet {
         self.update_controls(&layer_errors, &propagation.activations, learning_rate)
     }
 
+    #[time_graph::instrument]
     fn update_controls(&mut self, layer_errors: &Vec<Vector<f64>>, activations: &Vec<Vector<f64>>, learning_rate: f64) {
 
         for (index, layer_error) in layer_errors.iter().rev().enumerate() {
@@ -92,13 +99,19 @@ impl NeuNet {
             let rows = layer_error.into_iter().len();
             let cols = (&activations[index]).into_iter().len();
 
-            let delta_weight = Matrix::from_fn(rows, cols,
-            |col, row| {
-                learning_rate * layer_error[row] * &activations[index][col]
+            let result = spanned!("matrix calc", {
+
+                let delta_weight = Matrix::from_fn(rows, cols,
+                |col, row| {
+                    learning_rate * layer_error[row] * &activations[index][col]
+                });
+                
             });
 
-            self.bias[index] = &self.bias[index] - layer_error;
-            self.weights[index] = &self.weights[index] - delta_weight;
+
+
+            self.bias[index] -= layer_error;
+            // self.weights[index] = &self.weights[index] - delta_weight;
 
         }
 

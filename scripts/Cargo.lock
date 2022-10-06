@@ -160,6 +160,8 @@ version = "0.1.0"
 dependencies = [
  "rand",
  "rulinalg",
+ "time-graph",
+ "time-graph-macros",
 ]
 
 [[package]]
