@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 neural_network = {path = "../../neural_network"}
+time-graph = "0.1.3"
 utils = {path = "../../utils"}
 
 [[bin]]

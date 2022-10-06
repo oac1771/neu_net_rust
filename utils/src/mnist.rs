@@ -1,6 +1,6 @@
 use std::io::Error;
 use std::io::prelude::*;
-use ndarray::Array1;
+use ndarray::Array2;
 use flate2::read::GzDecoder;
 use std::fs::File;
 use neural_network::neu_net::builder::data::Data;
@@ -13,16 +13,16 @@ const NUMBER_ELEMENTS_IN_IMAGE: usize = 784;
 const MAX_IMAGE_ELEMENT_VALUE: f64 = 255.0;
 
 pub struct MnistData {
-    pub data: Array1<f64>,
-    pub label: Array1<f64>
+    pub data: Array2<f64>,
+    pub label: Array2<f64>
 }
 
 impl Data for MnistData {
-    fn get_data(&self) -> &Array1<f64> {
+    fn get_data(&self) -> &Array2<f64> {
         return &self.data
     }
 
-    fn get_label(&self) -> &Array1<f64> {
+    fn get_label(&self) -> &Array2<f64> {
         return &self.label
     }
 }
@@ -59,8 +59,8 @@ impl MnistData {
             .collect::<Vec<Vec<u8>>>();
 
         let mut mnist_data: Vec<MnistData> = Vec::with_capacity(data_set_length);
-        let mut label: Array1<f64>;
-        let mut data: Array1<f64>;
+        let mut label: Array2<f64>;
+        let mut data: Array2<f64>;
 
         for index in 0..data_set_length {
             label = MnistData::process_label(&cleaned_label_contents[index]);
@@ -71,17 +71,17 @@ impl MnistData {
         return mnist_data
     }
 
-    fn process_label(label: &u8) -> Array1<f64> {
-        let mut label_vector = Array1::<f64>::zeros(LENGTH_OF_LABEL_OUTPUT_VECTOR);
-        label_vector[*label as usize] = 1.0;
+    fn process_label(label: &u8) -> Array2<f64> {
+        let mut label_vector = Array2::<f64>::zeros((LENGTH_OF_LABEL_OUTPUT_VECTOR, 1));
+        label_vector[[*label as usize, 0]] = 1.0;
 
         return label_vector;
 
     }
 
-    fn process_image(image: &Vec<u8>) -> Array1<f64> {
-        let image_vector = image.into_iter().map(|x| *x as f64 / MAX_IMAGE_ELEMENT_VALUE).collect::<Array1<f64>>();
-        return image_vector
+    fn process_image(image: &Vec<u8>) -> Array2<f64> {
+        let image_vector = Array2::from_shape_vec((image.len(), 1), image.into_iter().map(|x| *x as f64 / MAX_IMAGE_ELEMENT_VALUE).collect());
+        return image_vector.unwrap()
 
     }
 }
